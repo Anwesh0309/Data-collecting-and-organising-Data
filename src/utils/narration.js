@@ -16,13 +16,24 @@ export function introNarration() {
 export function wonderSlideNarration(slideIdx, revealed) {
   const slide = WONDER_SLIDES[slideIdx]
   if (!slide) return []
-  const out = [
-    say('Hmm, I wonder...'),
+
+  // When revealing the insight — ONLY narrate the insight, don't restart
+  if (revealed) {
+    return [cheer(slide.insight)]
+  }
+
+  // Fresh slide load — start with the question text directly (no "Hmm I wonder" intro)
+  return [
     ask(slide.question),
     think(slide.hint),
   ]
-  if (revealed) out.push(cheer(slide.insight))
-  return out
+}
+
+export function wonderPhaseIntroNarration() {
+  // Only plays once when Wonder phase first opens
+  return [
+    say('Hmm, I wonder...'),
+  ]
 }
 
 export function storySlideNarration(slideIdx) {

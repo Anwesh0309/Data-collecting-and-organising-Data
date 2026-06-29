@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useGameStore } from '../../store/gameStore.js'
 import { narrate, stopNarration } from '../../utils/audio.js'
-import { wonderSlideNarration } from '../../utils/narration.js'
+import { wonderSlideNarration, wonderPhaseIntroNarration } from '../../utils/narration.js'
 import { WONDER_SLIDES } from '../../data/wonderSlides.js'
 import NarrationCaption from '../ui/NarrationCaption.jsx'
 
@@ -40,10 +40,21 @@ export default function WonderPhase() {
   const { setPhase, addXP, audioEnabled } = useGameStore()
   const [qIndex, setQIndex] = useState(0)
   const [revealed, setRevealed] = useState(false)
+  const isFirstLoad = useRef(true)
 
   useEffect(() => {
     stopNarration()
-    if (audioEnabled) {
+    if (!audioEnabled) return
+
+    if (isFirstLoad.current) {
+      // Very first time Wonder phase opens — play "Hmm I wonder" then the question
+      isFirstLoad.current = false
+      narrate([
+        ...wonderPhaseIntroNarration(),
+        ...wonderSlideNarration(0, false),
+      ])
+    } else {
+      // Subsequent navigations — start directly from question text, no intro
       narrate(wonderSlideNarration(qIndex, revealed))
     }
     return () => stopNarration()
@@ -53,12 +64,15 @@ export default function WonderPhase() {
 
   function handleInvestigate() {
     if (!revealed) {
+      // Show insight — narrate only the insight text
       stopNarration()
       setRevealed(true)
+      // Narration fires via useEffect on revealed change
     } else if (qIndex < WONDER_SLIDES.length - 1) {
+      // Next slide — start directly from that slide's question, no "Hmm I wonder"
       stopNarration()
-      setQIndex(i => i + 1)
       setRevealed(false)
+      setQIndex(i => i + 1)
     } else {
       stopNarration()
       addXP(20)
