@@ -1,0 +1,149 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;600;700&display=swap');
+
+/* ── DataQuest SG — Dark Purple Theme (matching reference exactly) ── */
+:root {
+  --purple-deep:    #1a1040;
+  --purple-dark:    #1e1152;
+  --purple-mid:     #2d1b69;
+  --purple-card:    #2a1f5e;
+  --purple-hover:   #3d2b80;
+  --purple-border:  #4a3a8a;
+  --yellow:         #f5c518;
+  --yellow-hover:   #e6b800;
+  --gold:           #ffd600;
+  --teal:           #00d4aa;
+  --green:          #22c55e;
+  --green-dark:     #16a34a;
+  --red:            #ef4444;
+  --orange:         #f97316;
+  --pink:           #ec4899;
+  --blue:           #3b82f6;
+
+  --text-white:     #ffffff;
+  --text-light:     #e2d9f3;
+  --text-muted:     #9d8ec4;
+  --text-dim:       #6b5fa6;
+
+  --font-heading:   'Nunito', sans-serif;
+  --font-body:      'Inter', sans-serif;
+  --font-mono:      'IBM Plex Mono', monospace;
+
+  --radius-sm:   8px;
+  --radius-md:   12px;
+  --radius-lg:   16px;
+  --radius-xl:   20px;
+  --radius-2xl:  24px;
+  --shadow-card: 0 4px 24px rgba(0,0,0,0.4);
+  --shadow-btn:  0 4px 20px rgba(245,197,24,0.4);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body, #root {
+  width: 100%; height: 100%; overflow: hidden;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--purple-deep);
+  color: var(--text-white);
+  -webkit-font-smoothing: antialiased;
+}
+
+#root { display: flex; flex-direction: column; }
+
+button {
+  font-family: var(--font-heading);
+  cursor: pointer; border: none; outline: none; user-select: none;
+}
+button:focus-visible { outline: 2px solid var(--yellow); outline-offset: 2px; }
+
+/* Star field background — applied to body via JS */
+.star-bg {
+  background:
+    radial-gradient(ellipse at 20% 50%, rgba(91,79,207,0.15) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(0,212,170,0.08) 0%, transparent 40%),
+    var(--purple-deep);
+}
+
+/* Phase wrapper — full height, no overflow */
+.phase-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+  min-height: 0;
+}
+
+/* Scrollable content inside a phase */
+.phase-scroll {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  min-height: 0;
+}
+.phase-scroll::-webkit-scrollbar { width: 3px; }
+.phase-scroll::-webkit-scrollbar-track { background: transparent; }
+.phase-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius:2px; }
+
+/* Card */
+.card {
+  background: var(--purple-card);
+  border: 1px solid var(--purple-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-card);
+}
+
+/* Yellow CTA button — exactly like reference */
+.btn-yellow {
+  background: var(--yellow);
+  color: #1a1040;
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 18px;
+  border-radius: var(--radius-lg);
+  padding: 14px 32px;
+  border: none;
+  cursor: pointer;
+  box-shadow: var(--shadow-btn);
+  transition: background 0.15s, transform 0.1s;
+}
+.btn-yellow:hover { background: var(--yellow-hover); transform: translateY(-1px); }
+.btn-yellow:active { transform: scale(0.97); }
+
+/* Ghost button */
+.btn-ghost {
+  background: rgba(255,255,255,0.08);
+  color: var(--text-light);
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 15px;
+  border-radius: var(--radius-md);
+  padding: 10px 20px;
+  border: 1px solid rgba(255,255,255,0.12);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.btn-ghost:hover { background: rgba(255,255,255,0.13); }
+
+/* Answer option buttons — dark purple cards like reference */
+.answer-btn {
+  background: var(--purple-card);
+  color: var(--text-white);
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 22px;
+  border-radius: var(--radius-lg);
+  padding: 18px;
+  border: 2px solid var(--purple-border);
+  cursor: pointer;
+  transition: all 0.15s;
+  width: 100%;
+}
+.answer-btn:hover { background: var(--purple-hover); border-color: rgba(255,255,255,0.3); }
+.answer-btn.correct { background: rgba(34,197,94,0.2); border-color: var(--green); color: #86efac; }
+.answer-btn.wrong   { background: rgba(239,68,68,0.2);  border-color: var(--red);   color: #fca5a5; }
+
+/* Tiny star dots scattered on backgrounds */
+@keyframes twinkle { 0%,100% { opacity:0.3 } 50% { opacity:1 } }

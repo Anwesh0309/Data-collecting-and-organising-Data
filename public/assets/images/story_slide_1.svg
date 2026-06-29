@@ -1,0 +1,107 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="800" height="450">
+  <defs>
+    <linearGradient id="bg1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#E8F5E9"/>
+      <stop offset="100%" style="stop-color:#F3E5F5"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="450" fill="url(#bg1)"/>
+  <!-- Classroom window -->
+  <rect x="600" y="20" width="160" height="120" rx="8" fill="#B3E5FC" stroke="#0288D1" stroke-width="3"/>
+  <line x1="680" y1="20" x2="680" y2="140" stroke="#0288D1" stroke-width="2"/>
+  <line x1="600" y1="80" x2="760" y2="80" stroke="#0288D1" stroke-width="2"/>
+  <!-- Sun through window -->
+  <circle cx="650" cy="60" r="22" fill="#FFD700" opacity="0.7"/>
+  <!-- Blackboard -->
+  <rect x="30" y="20" width="540" height="180" rx="10" fill="#2E7D32" stroke="#1B5E20" stroke-width="3"/>
+  <rect x="40" y="30" width="520" height="160" rx="6" fill="#388E3C" opacity="0.5"/>
+  <!-- Blackboard content -->
+  <text x="300" y="70" text-anchor="middle" font-family="Nunito,sans-serif" font-weight="900" font-size="22" fill="#A5D6A7">📊 FAVOURITE DRINK SURVEY</text>
+  <text x="300" y="100" text-anchor="middle" font-family="Nunito,sans-serif" font-weight="700" font-size="14" fill="#C8E6C9">Ask each student: "What is your favourite drink?"</text>
+  <!-- Tally rows on blackboard -->
+  <text x="60" y="128" font-family="Nunito,sans-serif" font-weight="700" font-size="13" fill="white">☕ Milo:</text>
+  <text x="160" y="128" font-family="IBM Plex Mono,monospace" font-weight="700" font-size="14" fill="#FFD600">卌 ||</text>
+  <text x="240" y="128" font-family="Nunito,sans-serif" font-weight="900" font-size="14" fill="#FFD600">= 7</text>
+  <text x="60" y="150" font-family="Nunito,sans-serif" font-weight="700" font-size="13" fill="white">🧃 Ribena:</text>
+  <text x="160" y="150" font-family="IBM Plex Mono,monospace" font-weight="700" font-size="14" fill="#FFD600">卌</text>
+  <text x="210" y="150" font-family="Nunito,sans-serif" font-weight="900" font-size="14" fill="#FFD600">= 5</text>
+  <text x="60" y="172" font-family="Nunito,sans-serif" font-weight="700" font-size="13" fill="white">🍵 Pokka Tea:</text>
+  <text x="175" y="172" font-family="IBM Plex Mono,monospace" font-weight="700" font-size="14" fill="#FFD600">||||</text>
+  <text x="225" y="172" font-family="Nunito,sans-serif" font-weight="900" font-size="14" fill="#FFD600">= 4</text>
+  <!-- Pointer stick -->
+  <line x1="540" y1="170" x2="300" y2="135" stroke="#8D6E63" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="540" cy="170" r="5" fill="#8D6E63"/>
+  <!-- Teacher Suki at board -->
+  <circle cx="590" cy="240" r="32" fill="#F5C89E" stroke="#E8A855" stroke-width="2"/>
+  <ellipse cx="590" cy="210" rx="34" ry="18" fill="#1a1040"/>
+  <circle cx="580" cy="239" r="5" fill="#1a1040"/>
+  <circle cx="600" cy="239" r="5" fill="#1a1040"/>
+  <circle cx="581" cy="238" r="1.5" fill="white"/>
+  <circle cx="601" cy="238" r="1.5" fill="white"/>
+  <path d="M581 252 Q590 260 599 252" stroke="#C0603A" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <circle cx="579" cy="234" r="8" fill="#FFB3A0" opacity="0.5"/>
+  <circle cx="601" cy="234" r="8" fill="#FFB3A0" opacity="0.5"/>
+  <rect x="554" y="220" width="10" height="8" rx="2" fill="#2d1b69"/>
+  <rect x="556" y="213" width="6" height="12" rx="2" fill="#2d1b69"/>
+  <rect x="558" y="270" width="64" height="55" rx="12" fill="#5B4FCF"/>
+  <!-- Speech bubble -->
+  <rect x="400" y="185" width="180" height="50" rx="10" fill="white" stroke="#5B4FCF" stroke-width="2"/>
+  <path d="M565 210 L580 225 L570 210" fill="white" stroke="#5B4FCF" stroke-width="1"/>
+  <text x="490" y="207" text-anchor="middle" font-family="Nunito,sans-serif" font-weight="800" font-size="11" fill="#1a1040">What is your favourite</text>
+  <text x="490" y="222" text-anchor="middle" font-family="Nunito,sans-serif" font-weight="800" font-size="11" fill="#1a1040">drink? 🥤</text>
+  <!-- Students at desks -->
+  <!-- Row of students -->
+  <g transform="translate(50,290)">
+    <!-- Desk 1 -->
+    <rect x="0" y="30" width="80" height="20" rx="4" fill="#FFE082"/>
+    <circle cx="40" cy="15" r="16" fill="#FFDAB9" stroke="#E8A855" stroke-width="1.5"/>
+    <ellipse cx="40" cy="0" rx="18" ry="9" fill="#3E2723"/>
+    <circle cx="33" cy="15" r="3" fill="#1a1040"/>
+    <circle cx="47" cy="15" r="3" fill="#1a1040"/>
+    <path d="M34 24 Q40 29 46 24" stroke="#C0603A" stroke-width="1.5" fill="none"/>
+    <rect x="20" y="30" width="40" height="22" rx="6" fill="#FF6B9D"/>
+    <!-- Speech bubble with answer -->
+    <rect x="-10" y="-28" width="40" height="22" rx="6" fill="white" stroke="#FF6B9D" stroke-width="1.5"/>
+    <path d="M15 -6 L25 5 L20 -6" fill="white" stroke="#FF6B9D" stroke-width="1"/>
+    <text x="10" y="-14" text-anchor="middle" font-size="16">☕</text>
+  </g>
+  <g transform="translate(170,290)">
+    <rect x="0" y="30" width="80" height="20" rx="4" fill="#FFE082"/>
+    <circle cx="40" cy="15" r="16" fill="#F5C89E" stroke="#E8A855" stroke-width="1.5"/>
+    <ellipse cx="40" cy="0" rx="18" ry="9" fill="#212121"/>
+    <circle cx="33" cy="15" r="3" fill="#1a1040"/>
+    <circle cx="47" cy="15" r="3" fill="#1a1040"/>
+    <path d="M34 24 Q40 29 46 24" stroke="#C0603A" stroke-width="1.5" fill="none"/>
+    <rect x="20" y="30" width="40" height="22" rx="6" fill="#42A5F5"/>
+    <rect x="-10" y="-28" width="40" height="22" rx="6" fill="white" stroke="#42A5F5" stroke-width="1.5"/>
+    <path d="M15 -6 L25 5 L20 -6" fill="white" stroke="#42A5F5" stroke-width="1"/>
+    <text x="10" y="-14" text-anchor="middle" font-size="16">🧃</text>
+  </g>
+  <g transform="translate(290,290)">
+    <rect x="0" y="30" width="80" height="20" rx="4" fill="#FFE082"/>
+    <circle cx="40" cy="15" r="16" fill="#FFDAB9" stroke="#E8A855" stroke-width="1.5"/>
+    <ellipse cx="40" cy="0" rx="18" ry="9" fill="#4E342E"/>
+    <circle cx="33" cy="15" r="3" fill="#1a1040"/>
+    <circle cx="47" cy="15" r="3" fill="#1a1040"/>
+    <path d="M34 24 Q40 29 46 24" stroke="#C0603A" stroke-width="1.5" fill="none"/>
+    <rect x="20" y="30" width="40" height="22" rx="6" fill="#66BB6A"/>
+    <rect x="-10" y="-28" width="40" height="22" rx="6" fill="white" stroke="#66BB6A" stroke-width="1.5"/>
+    <path d="M15 -6 L25 5 L20 -6" fill="white" stroke="#66BB6A" stroke-width="1"/>
+    <text x="10" y="-14" text-anchor="middle" font-size="16">🍵</text>
+  </g>
+  <g transform="translate(410,290)">
+    <rect x="0" y="30" width="80" height="20" rx="4" fill="#FFE082"/>
+    <circle cx="40" cy="15" r="16" fill="#F5C89E" stroke="#E8A855" stroke-width="1.5"/>
+    <ellipse cx="40" cy="0" rx="18" ry="9" fill="#1a1040"/>
+    <circle cx="33" cy="15" r="3" fill="#1a1040"/>
+    <circle cx="47" cy="15" r="3" fill="#1a1040"/>
+    <path d="M34 24 Q40 29 46 24" stroke="#C0603A" stroke-width="1.5" fill="none"/>
+    <rect x="20" y="30" width="40" height="22" rx="6" fill="#FF7043"/>
+    <rect x="-10" y="-28" width="40" height="22" rx="6" fill="white" stroke="#FF7043" stroke-width="1.5"/>
+    <path d="M15 -6 L25 5 L20 -6" fill="white" stroke="#FF7043" stroke-width="1"/>
+    <text x="10" y="-14" text-anchor="middle" font-size="16">☕</text>
+  </g>
+  <!-- Caption bar -->
+  <rect x="0" y="420" width="800" height="30" fill="#1a1040" opacity="0.7"/>
+  <text x="400" y="440" text-anchor="middle" font-family="Nunito,sans-serif" font-weight="900" font-size="14" fill="#f5c518">📋 Suki asks every student — one question at a time!</text>
+</svg>
