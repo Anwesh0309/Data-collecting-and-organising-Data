@@ -1,14 +1,21 @@
 /**
- * DataQuest SG — Audio Engine
- * Generation-counter approach: every narrate() call increments the generation.
- * Any in-flight async with an old generation is silently discarded.
- * NO circular imports — does not import from store.
+ * DataQuest SG — Audio Engine  v3
  *
- * Subtitle/caption system: subscribers can listen to currentText changes.
+ * STRICT SINGLE-STREAM: Only one audio segment plays at any time.
+ * stopNarration() kills the current audio object IMMEDIATELY and resolves
+ * the in-flight Promise so the segment loop exits on its next iteration.
+ *
+ * How it works:
+ *   - Every narrate() call calls stopNarration() first → increments _generation
+ *   - The segment loop stores myGen at start
+ *   - After EVERY await it checks _generation === myGen before proceeding
+ *   - stopNarration() sets _currentAudio.src = '' AND calls _resolveCurrentSeg()
+ *     so the awaited Promise resolves immediately (no waiting for onended)
+ *   - Result: no overlap possible, even with rapid Next/Back clicks
  */
 import audioMap from './audioMap.js'
 
-// Segment factories
+// ── Segment factories ────────────────────────────────────────────────────────
 export const say       = (t) => ({ text: t, style: 'statement' })
 export const ask       = (t) => ({ text: t, style: 'question' })
 export const cheer     = (t) => ({ text: t, style: 'celebration' })
@@ -18,20 +25,17 @@ export const celebrate = (t) => ({ text: t, style: 'celebration' })
 export const instruct  = (t) => ({ text: t, style: 'instruction' })
 export const encourage = (t) => ({ text: t, style: 'encouragement' })
 
-// ── Internal state ──────────────────────────────────────────────────────────
-let _enabled       = true
-let _currentAudio  = null
-let _generation    = 0
-let _currentText   = ''          // currently speaking text
-let _currentStyle  = ''          // currently speaking style
-const _subscribers = new Set()   // Set of listener callbacks
+// ── Module state ─────────────────────────────────────────────────────────────
+let _enabled            = true
+let _generation         = 0       // incremented on every stop — old loops abort
+let _currentAudio       = null    // the HTMLAudioElement currently playing
+let _resolveCurrentSeg  = null    // resolve fn for the in-flight segment Promise
 
-// ── Subtitle subscriber API ─────────────────────────────────────────────────
-/**
- * Subscribe to narration text changes.
- * Callback receives { text, style } when a new segment starts, or null when narration ends.
- * Returns an unsubscribe function.
- */
+// ── Subtitle / caption subscribers ──────────────────────────────────────────
+let _currentText  = ''
+let _currentStyle = ''
+const _subscribers = new Set()
+
 export function onNarrationChange(cb) {
   _subscribers.add(cb)
   return () => _subscribers.delete(cb)
@@ -49,64 +53,94 @@ export function getCurrentNarration() {
   return _currentText ? { text: _currentText, style: _currentStyle } : null
 }
 
-// ── Audio enabled ────────────────────────────────────────────────────────────
+// ── Audio toggle ─────────────────────────────────────────────────────────────
 export function setAudioEnabled(val) {
   _enabled = val
   if (!val) stopNarration()
 }
-
 export function isAudioEnabled() { return _enabled }
 
-// ── URL resolution — static pre-generated assets only ───────────────────────
+// ── URL lookup (static pre-generated only) ───────────────────────────────────
 async function getUrl(text) {
   if (audioMap[text]) return `/assets/audio/${audioMap[text]}`
-  if (import.meta.env.DEV) {
-    console.warn(`[audio] No pre-generated MP3 for: "${text.slice(0, 60)}"`)
-  }
   return ''
 }
 
-// ── Core engine ──────────────────────────────────────────────────────────────
+// ── STOP — kills everything immediately ──────────────────────────────────────
 export function stopNarration() {
-  _generation++
+  _generation++                          // all in-flight loops see a stale gen and exit
+
+  // Kill the current audio element RIGHT NOW — don't wait for onended
   if (_currentAudio) {
     _currentAudio.pause()
     try { _currentAudio.src = '' } catch (_) {}
     _currentAudio = null
   }
-  emit(null, null)   // clear subtitle
-}
 
-export async function narrate(segments) {
-  if (!segments?.length) return
-  stopNarration()                       // kills previous, increments generation
-  const myGen = _generation
-
-  for (const seg of segments) {
-    if (_generation !== myGen || !_enabled) {
-      emit(null, null)
-      return
-    }
-
-    // Show subtitle immediately when segment starts
-    emit(seg.text, seg.style)
-
-    try {
-      const url = await getUrl(seg.text)
-      if (!url || _generation !== myGen || !_enabled) {
-        continue   // still show subtitle, just no audio
-      }
-      await new Promise((resolve) => {
-        const audio = new Audio(url)
-        _currentAudio = audio
-        audio.onended  = () => { _currentAudio = null; resolve() }
-        audio.onerror  = () => { _currentAudio = null; resolve() }
-        audio.play().catch(() => { _currentAudio = null; resolve() })
-      })
-    } catch (_) { /* skip audio, subtitle still shown */ }
+  // Resolve the awaited segment Promise so the loop iteration unblocks immediately
+  if (_resolveCurrentSeg) {
+    _resolveCurrentSeg()
+    _resolveCurrentSeg = null
   }
 
+  emit(null, null)   // clear subtitle bar
+}
+
+// ── NARRATE — the only entry point ───────────────────────────────────────────
+export async function narrate(segments) {
+  if (!segments?.length) return
+
+  // ① Hard-stop everything — no overlap possible
+  stopNarration()
+  const myGen = _generation   // snapshot — this loop owns this generation
+
+  for (const seg of segments) {
+    // ② Abort if superseded before starting this segment
+    if (_generation !== myGen || !_enabled) break
+
+    // ③ Show subtitle immediately
+    emit(seg.text, seg.style)
+
+    // ④ Resolve the URL (fast — usually instant cache hit)
+    const url = await getUrl(seg.text)
+
+    // ⑤ Re-check after await — user may have navigated away during getUrl
+    if (_generation !== myGen || !_enabled) break
+
+    if (url) {
+      // ⑥ Play audio, wrapping in a Promise that stopNarration() can resolve early
+      await new Promise((resolve) => {
+        _resolveCurrentSeg = resolve          // stopNarration can call this
+
+        const audio = new Audio(url)
+        _currentAudio = audio
+
+        audio.onended = () => {
+          _currentAudio = null
+          _resolveCurrentSeg = null
+          resolve()
+        }
+        audio.onerror = () => {
+          _currentAudio = null
+          _resolveCurrentSeg = null
+          resolve()
+        }
+
+        audio.play().catch(() => {
+          _currentAudio = null
+          _resolveCurrentSeg = null
+          resolve()
+        })
+      })
+    }
+    // no url → subtitle still shown, no audio, move to next segment
+
+    // ⑦ Re-check after audio finishes — another stopNarration may have fired
+    if (_generation !== myGen) break
+  }
+
+  // ⑧ Clear subtitle when all segments done (only if we're still the active gen)
   if (_generation === myGen) {
-    emit(null, null)   // clear subtitle when done
+    emit(null, null)
   }
 }
