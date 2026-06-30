@@ -104,7 +104,7 @@ export default function StoryPhase() {
               justifyContent: 'center',
             }}>
               <img
-                src={`/assets/images/story_slide_${slide}.svg`}
+                src={`/assets/images/story_slide_${slide}.png`}
                 alt={s.title}
                 style={{
                   maxHeight: '100%',
